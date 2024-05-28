@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						28/05/2024
+					</span>
+				</section>
+				<!-- Mathmetical -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section><h3>Bayesian Inference</h3></section>
+					<section>
+						<h4 class="left-aligned-heading">Bayes' theorem</h4>
+						\[\begin{aligned}
+						\small
+						\text{posterior}=\frac{\text{likelihood} * \text{prior}}{\text{marginal likelihood}}
+						\end{aligned} \]
+					</section>
+					<section data-markdown>
+						### Example - Flip a Coin
+						+ The coin is bias, which means the $p(tail) ≠ 0.5$; 
+						+ Estimate based on common sense, $p(tail) = 0.5$;  
+						+ The prior: $p(hypostesis) = 0.5$; 
+					</section>
+					<section data-markdown>
+						### Example - Flip a Coin
+						+ If flip the coin $n$ times and get $m$ tail; 
+						+ Likelihood: $p(D|m, \lambda) = \frac{n!}{m!(n-m)!}\lambda^{m}\left(1-\lambda\right)^{n-m}$;  
+						+ $\hat{\lambda}_{ML} = \underset{\lambda}{argmax}(p(D|m, \lambda)) = \frac{m}{n}$; 
+					</section>
+				</section>
+				<!-- Bayesian Neural Network -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section><h3>Bayesian Neural Network</h3></section>
+					<section>
+						<h4 class="left-aligned-heading" style="font-size: 120%;">Advantages</h4>
+						<li class="left-aligned-heading" style="font-size: 100%;">Avoid overconfident</li>
+						<li class="left-aligned-heading" style="font-size: 100%;">Automatic model complex control</li>
+						<li class="left-aligned-heading" style="font-size: 100%;">Incorporating prior knowledge & inductive biases</li>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Advantages: Avoid overconfident</div>
+						<div class="r-stack">
+							<img class="fragment fade-in" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/uncertainty_example.png?raw=true">
+						</div>
+						<a href="https://proceedings.neurips.cc/paper/2017/hash/2650d6089a6d640c5e85b2b88265dc2b-Abstract.html">
+							<div class="left-aligned-heading">
+							<p class="small-text">
+							@article{kendall2017uncertainties,<br>
+								title={What uncertainties do we need in bayesian deep learning for computer vision?},<br>
+								author={Kendall, Alex and Gal, Yarin},<br>
+								journal={Advances in neural information processing systems},<br>
+								volume={30},<br>
+								year={2017}}
+						</p></div></a>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Advantages: Automatic Model Selection</div>
+						Automatic model selection and model complex control
+						<div class="r-stack">
+							<img class="fragment fade-out" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/deepnet_regressor-matrices.png?raw=true" width="640" height="512">
+							<img class="fragment fade-in" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/deepnet_regressor-matrices-bayesian.png?raw=true" width="640" height="512">
+						</div>
+						<a href="https://github.com/ericmjl/bayesian-deep-learning-demystified">
+							<div class="left-aligned-heading">
+							<p class="small-text">
+							Bayesian Deep Learning Fundation
+						</p></div></a>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Advantages: Prior Knowledge</div>
+						<div class="left-aligned-heading"> This is induced by Bayes' theorem. </div>
+						<div class="left-aligned-heading"> The Prior Knowledge can be physical boundary, common sense and inductive biases. </div>
+					</section>
+				</section>
+				<!-- Example -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section><h3>Example: 3-layer BNN for regression</h3></section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Dependencies</div>
+						<pre><code data-trim data-noescape>
+							# Pytorch
+							import torch
+							import torch.nn as nn
+
+							# The Probabilistic Programming Language (PPL)
+							import pyro
+							import pyro.distributions as dist
+							from pyro.infer import Predictive
+							from pyro.nn import PyroModule, PyroSample
+							from pyro.infer import MCMC, NUTS # The 
+
+							import numpy as np
+							import matplotlib.pyplot as plt	
+						</code></pre>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">3-layer Linear NN <em>vs</em> 3-layer Bayesian NN</div>
+						<div class="r-stack">
+						<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">Linear Neural Network (1 / 512 / 512 / 1)</div>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/linear_NN.png?raw=true" width="988" height="428">
+							</span>
+						</span>
+						<span class="fragment fade-in">
+								<div class="left-aligned-heading">Bayesian Neural Network (1 / 512 / 512 / 1)</div>
+								<div class="left-aligned-heading">
+									<span style="font-size: 40px;">Dataset: </span>
+									<span style="font-size: 24px;">$(-5,-3) \cup (3,5)$ with $N(\mu=0, \sigma^2=0.25)$</span>
+								</div>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_-3_3_5_sigma0.5.png?raw=true" width="800" height="400">
+						</span>
+						</div>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian NN with Uncertainty</div>
+						<div class="left-aligned-heading">Bayesian Neural Network with 
+							<span style="color:rgb(255, 64, 64);">Aleatoric Uncertainty</span>
+						</div>
+						<div class="r-stack">
+							<img class="fragment fade-out" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_-3_3_5_sigma0.5.png?raw=true" width="800" height="400">
+							<img class="fragment" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_-3_3_5_sigma0.1.png?raw=true" width="800" height="400">
+						</div>
+							<span style="font-size: 40px;">Dataset: </span>
+							<span style="font-size: 22px;">$(-5,-3) \cup (3,5)$ with $N_1(\mu=0, \sigma_1^2=0.25)$ and $N_2(\mu=0, \sigma_2^2=0.01)$ </span>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian NN with Uncertainty</div>
+						<div class="left-aligned-heading">Bayesian Neural Network with 
+							<span style="color:rgb(255, 64, 64);">Epistemic Uncertainty</span>
+						</div>
+						<div class="r-stack">
+							<img class="fragment fade-out" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_-3_3_5_sigma0.5.png?raw=true" width="800" height="400">
+							<img class="fragment" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_5_sigma0.5.png?raw=true" width="800" height="400">
+						</div>
+							<span style="font-size: 40px;">Dataset: </span>
+							<span style="font-size: 22px;">$(-5,-3) \cup (3,5)$ with $N_1$ and $(-5,5)$ with $N_1$ </span>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian NN with Uncertainty</div>
+						<div class="left-aligned-heading">Bayesian Neural Network with 
+							<span style="color:rgb(255, 64, 64);">Epistemic Uncertainty</span>
+						</div>
+						<div class="r-stack">
+							<img class="fragment fade-out" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_-3_3_5_sigma0.1.png?raw=true" width="800" height="400">
+							<img class="fragment" data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/test/file/result_-5_5_sigma0.1.png?raw=true" width="800" height="400">
+						</div>
+							<span style="font-size: 40px;">Dataset: </span>
+							<span style="font-size: 22px;">$(-5,-3) \cup (3,5)$ with $N_2$ and $(-5,5)$ with $N_2$ </span>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
