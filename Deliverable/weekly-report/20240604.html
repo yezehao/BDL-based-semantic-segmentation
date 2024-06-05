@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						04/06/2024
+					</span>
+				</section>
+				<!-- Bayesian Inference and BNN -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<h3>Bayesian Inference &</h3>
+						<h3>Bayesian Neural Network</h3>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayes' Theorem</div>
+						\[\begin{aligned}
+						\small
+						& \text{posterior}=\frac{\text{likelihood} * \text{prior}}{\text{marginal likelihood}} \\
+						& p(\theta\mid D_y, D_x)=\frac{p(D_y\mid D_x,\theta)p(\theta)}{\int_\theta p(D_{y}\mid D_{x},\theta^{\prime})p(\theta^{\prime})d\theta^{\prime}}
+						\end{aligned} \]
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayes' Theorem</div>
+						\[\begin{aligned}
+						\small
+						p(\theta\mid D_y, D_x)=\frac{p(D_y\mid D_x,\theta)p(\theta)}{\int_\theta p(D_{y}\mid D_{x},\theta^{\prime})p(\theta^{\prime})d\theta^{\prime}}
+						\end{aligned} \]
+						<div class="left-aligned-heading" style="font-size: 80%;">
+						$\theta$ is the parameter of model, which is weights and bias. <br>
+						$\theta^{\prime}$ is the dummy variable for integration. <br> 
+						$D_x$ is the input of the training dataset. <br>
+						$D_y$ is the label of the training dataset. <br>
+						The $p(\theta\mid D_y, D_x)$ can be written as $p(\theta\mid \mathcal{D})$. 
+						</div>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Prediction</div>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							Sample from $p(\theta\mid \mathcal{D})$ to get a series of model parameters $\theta_i$, <br>
+							$\mathcal{\Theta}$ = {$\theta_i\mid i \in [0,N]$}
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							$x^{*}$ is the input for prediction, $y^{*}_i = \Phi_{\theta_i}(x^{*})$, <br>
+							$\hat{y} = \frac{1}{N} y^{*}_i = \frac{1}{\left|\mathcal{\Theta}\right|} \sum_{\theta_i \in \mathcal{\Theta}} \Phi_{\theta_i}(x^{*})$
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							The model's uncertainty on its prediction: <br> 
+							$p(y\mid x,\mathcal{D})=\int_\theta p(y\mid x,\theta')p(\theta\mid \mathcal{D})d\theta'$, <br>
+							Or calculate the uncertainty through covariance matrix: <br>
+							$\sum_{y\mid x,\mathcal{D}}=\frac1{|\Theta|-1}\sum_{\theta_i\in\Theta}\left(\Phi_{\theta_i}(x)-\hat{y}\right)\left(\Phi_{\theta_i}(x)-\hat{y}\right)^\top.$							
+						</li>
+					</section>
+				</section>
+				<!-- Updating Bayesian Neural Network -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section><h3>Updating BNN</h3></section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Approximation Methods</div>
+						<div class="left-aligned-heading" style="font-size: 120%;">MCMC and Variational Inference</div>
+						Why: the posterior distribution in NN is complex.
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Variational Inference</div>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							The variational parameter $\phi$ is initialized ($\phi_0$); <br> 
+							Obtain $\mathcal{\Theta}$ from variational distribution $q_{\phi}(\theta)$. <br>
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							Update $\phi$ to make $q_{\phi}(\theta)$ approaching $p(\theta\mid \mathcal{D})$; <br>
+							KL-divergence can be used to represent their diferences: <br>
+							$D_{\mathrm{KL}}(q_\phi\parallel p(\theta\mid \mathcal{D}))=
+							\int_{\theta} q_\phi(\theta')\mathrm{log}\biggl(\frac{q_\phi(\theta')}{P(\theta'\mid \mathcal{D})}\biggr)d\theta'$. <br>
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							Backpropagation: update $\phi$ to minimize KL-divergence; <br>
+							$f(\theta,\phi) = \mathrm{log}(q_\phi(\theta)) - \mathrm{log}(p(\mathcal{D}\mid\theta)p(\theta))$; <br>
+							$\Delta_\phi f=\text{backprop}_\phi(f)$; <br>
+							$\phi_i=\phi_{i+1}-\alpha\Delta_\phi f$. <br>
+						</li>
+					</section>
+				</section>
+				<!-- Training Dataset -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section><h3>Training Dataset </h3></section>
+					<section>
+						<div class="r-stack">
+						<span class="fragment fade-out">
+							<div class="left-aligned-heading" style="font-size: 120%;">MaSTr1325</div>
+							<div class="left-aligned-heading">Maritime Semantic Segmentation Training Dataset</div>
+							<img data-fragment-index="0" src="https://www.vicos.si/resources/mastr1325/images/mastr1325_image.jpg">
+							<a href="https://www.vicos.si/resources/mastr1325/">
+							<div class="left-aligned-heading">
+							<p class="small-text">
+							@inproceedings{bb_iros_2019, <br>
+								title={The MaSTr1325 dataset for training deep USV obstacle detection models},
+								author={Bovcon, Borja and Muhovi{\v{c}}, Jon and Per{\v{s}}, Janez and Kristan, Matej}, <br>
+								booktitle={2019 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, <br>
+								year={2019}, <br>
+								organization={IEEE}}
+							</p></div></a>
+						</span>
+						<span class="fragment fade-in">
+							<div class="left-aligned-heading" style="font-size: 120%;">MODD v2.0</div>
+							<div class="left-aligned-heading">Maritime Semantic Segmentation Training Dataset</div>
+							<img data-fragment-index="0" src="https://box.vicos.si/borja/viamaro/images/modd2/annotation_1.png" width="400" height="300">
+							<a href="https://www.vicos.si/resources/modd/">
+							<div class="left-aligned-heading">
+							<p class="small-text">
+							@article{Bovcon2018a, <br>
+								title = {Stereo obstacle detection for unmanned surface vehicles by IMU-assisted semantic segmentation}, <br>
+								author = {Borja Bovcon and Rok Mandeljc and Janez Per\v{s} and Matej Kristan}, <br>
+								year = {2018}, <br>
+								journal= {Robotics and Autonomous Systems}} <br>
+							</p></div></a>
+						</span>
+						</div>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
