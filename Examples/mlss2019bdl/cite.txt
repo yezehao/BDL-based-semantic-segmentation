@@ -1,0 +1,1 @@
+This module cite from: https://github.com/ivannz/mlss2019-bayesian-deep-learning
