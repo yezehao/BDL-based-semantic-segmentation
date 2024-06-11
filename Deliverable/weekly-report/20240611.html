@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						11/06/2024
+					</span>
+				</section>
+				<!-- Model Selection -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<h3>Model Selection</h3>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Architecture for Bayesian Approach</div>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							CNN
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							U-Net (2D) or V-Net (3D)
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							SegNet
+						</li>
+						<li class="left-aligned-heading" style="font-size: 80%; text-indent: -50px; padding-left: 50px;">
+							Mask R-CNN
+						</li>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">U-Net (2D) or V-Net (3D)</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">V-Net</div>
+								<img data-fragment-index="0" src="https://github.com/hula-ai/organ_segmentation_analysis/blob/master/imgs/fig3.png?raw=true" width="600" height="400">
+								<a href="https://github.com/hula-ai/organ_segmentation_analysis">
+								<div class="left-aligned-heading" style="font-size: 60%;">
+								GitHub: organ_segmentation_analysis
+								</div></a>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">U-Net</div>
+								<img data-fragment-index="0" src="https://github.com/hula-ai/organ_segmentation_analysis/blob/master/imgs/fig4.png?raw=true" width="600" height="400">
+								<a href="https://github.com/hula-ai/organ_segmentation_analysis">
+								<div class="left-aligned-heading" style="font-size: 60%;">
+								GitHub: organ_segmentation_analysis
+								</div></a>
+							</span>
+							</span>
+							<span class="fragment fade-in">
+								<div class="left-aligned-heading">U-Net on organ segmentation</div><br>
+								<a href="https://github.com/hula-ai/organ_segmentation_analysis/blob/master/Organ_Seg_Analysis.ipynb">
+								<div class="left-aligned-heading">
+								GitHub: organ_segmentation_analysis.ipynb
+								</div></a>
+							</span>							
+						</div>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">SegNet</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<img data-fragment-index="0" src="https://github.com/shreyavshetty/BayesianDeepLearning/blob/master/SegNet_Architecture.png?raw=true">
+								<a href="https://ieeexplore.ieee.org/abstract/document/7803544">
+								<div class="left-aligned-heading">
+								<p class="small-text">
+								@article{badrinarayanan2017segnet, <br>
+									title={Segnet: A deep convolutional encoder-decoder architecture for image segmentation}, <br>
+									author={Badrinarayanan, Vijay and Kendall, Alex and Cipolla, Roberto}, <br>
+									journal={IEEE transactions on pattern analysis and machine intelligence}, <br>
+									volume={39}, <br>
+									number={12}, <br>
+									pages={2481--2495}, <br>
+									year={2017}, <br>
+									publisher={IEEE}}
+								</p></div></a>
+							</span>
+							<span class="fragment fade-in">
+								<a href="https://github.com/alexgkendall/SegNet-Tutorial/tree/master">
+								<div class="left-aligned-heading">
+								Alex Kendall - Bayesian SegNet
+								</div></a><br>
+								<a href="https://github.com/NiuJ1ao/BayesSegNet-PyTorch">
+									<div class="left-aligned-heading">
+									GitHub: BayesSegNet-PyTorch
+								</div></a>
+						    </span>						
+						</div>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian CNN</div><br>
+						<a href="https://github.com/kumar-shridhar/PyTorch-BayesianCNN">
+							<div class="left-aligned-heading">
+							GitHub: Pytorch Bayesian CNN framework
+						</div></a><br>
+						<div class="left-aligned-heading">MNIST + LeNet</div>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian CNN</div><br>
+						<div class="r-stack">
+							<span class="fragment fade-in">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Examples/Images/BCNN-MNIST-1-J.png?raw=true">
+							</span>						
+						</div>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
