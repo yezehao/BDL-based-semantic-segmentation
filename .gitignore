@@ -1,0 +1,46 @@
+# ============== #
+# GITIGNORE FILE #
+# ============== # 
+# ========================== #
+# Dataset GITIGNORE Template #
+# ========================== # 
+Dataset/MaSTr1325/
+
+# ========================= #
+# Python GITIGNORE Template #
+# ========================= # 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Scrapy stuff:
+.scrapy
+
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
