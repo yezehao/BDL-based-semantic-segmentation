@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						20/06/2024
+					</span>
+				</section>
+				<!-- Model Selection -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Bayesian SegNet + CamVid</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian SegNet with CamVid</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									CamVid (Cambridge-driving Labeled Video Database):
+								</div><br>
+								<a href="https://arxiv.org/abs/1511.00561">
+								<div class="left-aligned-heading" style="font-size: 80%;">
+								SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation
+								</div></a><br>
+								<a href="https://github.com/alexgkendall/SegNet-Tutorial">
+								<div class="left-aligned-heading" style="font-size: 80%;">
+								Alex Kendall's GitHub
+								</div></a><br>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<a href="https://github.com/NiuJ1ao/BayesSegNet-PyTorch/tree/master">
+								<div class="left-aligned-heading">
+									BayesSegNet-PyTorch
+								</div></a>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Examples/Images/bayessegnet-pytorch-training-result.png?raw=true">
+							</span>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<a href="https://github.com/NiuJ1ao/BayesSegNet-PyTorch/tree/master">
+								<div class="left-aligned-heading">
+									BayesSegNet-PyTorch
+								</div></a>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Examples/Images/bayessegnet-pytorch-validation-result.png?raw=true">
+							</span>
+							</span>					
+							<span class="fragment fade-in">
+								<a href="https://github.com/zyxlele/Bayesian-Segmentation-and-Uncertainty-estimation-on-CityScapes">
+								<div class="left-aligned-heading">
+									MIT Bayesian SegNet
+								</div></a><br>
+								<div class="left-aligned-heading">
+									Juypter Notebook and Detailed Explanation
+								</div><br>
+								<div class="left-aligned-heading">
+									Use .h5 CitySpace dataset
+								</div><br>
+							</span>			
+						</div>
+					</section>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Bayesian SegNet + MaSTr1325</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian SegNet with MaSTr1325</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									SegNet + MaSTr1325
+								</div><br>
+								<a href="https://github.com/lojzezust/WaSR/tree/master">
+								<div class="left-aligned-heading">
+									WaSR
+								</div></a><br>
+								<a href="https://github.com/Andy-zhujunwen/UNET-ZOO">
+								<div class="left-aligned-heading">
+									UNET-ZOO
+								</div></a><br>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<a href="https://github.com/lojzezust/WaSR/tree/master">
+								<div class="left-aligned-heading">
+									WaSR
+								</div></a>
+								<div class="left-aligned-heading">									
+									PyTorch wrapper: pytorch_lightning.Trainer
+									<pre><code data-trim data-noescape data-line-numbers="4">
+										trainer = pl.Trainer(logger=logger,
+												gpus=args.gpus,
+												max_epochs=args.epochs,
+												strategy='ddp', # ddp/dp/cpu
+												resume_from_checkpoint=args.resume_from,
+												callbacks=callbacks,
+												sync_batchnorm=True,
+												log_every_n_steps=args.log_steps,
+												precision=args.precision)
+										trainer.fit(model, train_dl, val_dl)
+									</code></pre>
+									<a href="https://lightning.ai/docs/pytorch/stable/">
+									<div class="left-aligned-heading" style="font-size: 40%;">
+										pytorch_lightning
+									</div></a>
+								</div>
+							</span>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<a href="https://github.com/lojzezust/WaSR/tree/master">
+								<div class="left-aligned-heading">
+									UNET-ZOO
+								</div></a>
+								<div class="left-aligned-heading">
+									A series of models with a series of dataset options
+									<pre><code data-trim data-noescape data-line-numbers="2-3,11-13">
+										def getModel(args):
+											if args.arch == 'UNet':
+												model = Unet(3, 1).to(device)
+											if args.arch == 'resnet34_unet':
+												model = resnet34_unet(1,pretrained=False).to(device)
+											if args.arch == 'unet++':
+												args.deepsupervision = True
+												model = NestedUNet(args,3,1).to(device)
+											if args.arch =='Attention_UNet':
+												model = AttU_Net(3,1).to(device)
+											if args.arch == 'segnet':
+												model = SegNet(3,3).to(device)
+												# model = SegNet(3,1).to(device)
+											if args.arch == 'r2unet':
+												model = R2U_Net(3,1).to(device)
+											if args.arch == 'myChannelUnet':
+												model = myChannelUnet(3,1).to(device)
+											if args.arch == 'cenet':
+												from cenet import CE_Net_
+												model = CE_Net_().to(device)
+										return model
+									</code></pre>
+								</div>
+							</span>
+							</span>	
+							<span class="fragment fade-in">
+								<a href="https://github.com/lojzezust/WaSR/tree/master">
+								<div class="left-aligned-heading">
+									UNET-ZOO
+								</div></a><br>
+								<div class="left-aligned-heading">
+									Training for two epochs but the results have not been processed. 
+								</div><br>
+								<div class="left-aligned-heading">
+									Results can be used to compared with Bayes SegNet. 
+								</div><br>
+							</span>					
+						</div>
+					</section>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 120%;">Computational Resources</div>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">
+							Computational Resources
+						</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									BayesSegNet-PyTorch: Terminal
+								</div>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Examples/Images/bayessegnet-pytorch-terminal.png?raw=true">
+							</span>
+							<span class="fragment fade-in">
+								<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									BayesSegNet-PyTorch: Terminal
+								</div>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Examples/Images/bayessegnet-pytorch-time.png?raw=true">
+								</span>
+								</span>
+							<span class="fragment fade-in">
+							<div class="left-aligned-heading">
+								Department of Mechanical - remote PC: <br> CUDA cannot be installed <br><br>
+								Use workstation or Cload Computation: <br> Google Colab / Others
+							</div>
+							</span>
+						</div>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
