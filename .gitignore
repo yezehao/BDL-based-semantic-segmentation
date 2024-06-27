@@ -9,6 +9,9 @@ Dataset/MaSTr1325/
 # ========================= #
 # Python GITIGNORE Template #
 # ========================= # 
+
+# Ignore all __pycache__ directories
+**/__pycache__/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
