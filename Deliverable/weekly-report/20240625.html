@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						25/06/2024
+					</span>
+				</section>
+				<!-- Model Selection -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">SegNet + MaSTr1325</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">SegNet with 3 Epochs</div>
+						<div class="r-stack">
+							<!-- Slide 1 val 128 -->
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Merged Image with Ground Truth: val_128
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_groundtruth_masked.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_groundtruth.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+							<!-- Slide 2 val 128 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Prediction: val_128
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_masked.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_labeling.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+							</span>
+							<!-- Slide 3 val 128 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Comparison: val_128
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_groundtruth.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_labeling.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+							</span>
+							<!-- Slide 4 val 001 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Merged Image with Ground Truth: val_001
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_001_groundtruth_masked.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_001_groundtruth.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+							</span>
+							<!-- Slide 5 val 001 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Prediction: val_001
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_001_epoch2_masked.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_001_epoch2_labeling.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+							</span>
+							<!-- Slide 6 val 096 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Merged Image with Ground Truth: val_096
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_096_groundtruth_masked.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_096_groundtruth.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+							</span>
+							<!-- Slide 7 val 096 -->
+							<span class="fragment fade-in">
+								<div class="left-aligned-heading">
+									Prediction: val_096
+								</div><br>
+								<div style="display: flex;">
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_096_epoch2_masked.png?raw=true" width="448" height="336">
+								</div>
+								<div style="flex: 1;">
+									<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_096_epoch2_labeling.png?raw=true" width="448" height="336">
+								</div>
+								</div>
+							</span>
+						</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Image val_128 with different thresholds</div>
+						<div class="r-stack">
+							<!-- Slide 1 val 128 threshold 0.2 -->
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Threshold = 0.2 with val_128
+								</div><br>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_masked.png?raw=true">
+							</span>
+							<!-- Slide 2 val 128 threshold 0.5 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Threshold = 0.5 with val_128
+								</div><br>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_thre0.5.png?raw=true">
+							</span>
+							</span>
+							<!-- Slide 3 val 128 threshold 0.6 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Threshold = 0.6 with val_128
+								</div><br>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_thre0.6.png?raw=true">
+							</span>
+							</span>
+							<!-- Slide 4 val 128 threshold 0.7 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Threshold = 0.7 with val_128
+								</div><br>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_thre0.7.png?raw=true">
+							</span>
+							</span>
+							<!-- Slide 5 val 128 threshold 0.8 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading">
+									Threshold = 0.8 with val_128
+								</div><br>
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/val_128_epoch2_thre0.8.png?raw=true">
+							</span>
+							</span>
+				
+						</div>
+					</section>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
