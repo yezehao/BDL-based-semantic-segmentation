@@ -1,10 +1,16 @@
 # ============== #
 # GITIGNORE FILE #
 # ============== # 
-# ========================== #
-# Dataset GITIGNORE Template #
-# ========================== # 
-Dataset/MaSTr1325/
+# ================= #
+# Dataset GITIGNORE #
+# ================= #
+Dataset/MaSTr1325/*
+
+# ================= #
+# Results GITIGNORE #
+# ================= #
+None-Bayes-SegNet/result/log/*
+None-Bayes-SegNet/result/prediction/*
 
 # ========================= #
 # Python GITIGNORE Template #
