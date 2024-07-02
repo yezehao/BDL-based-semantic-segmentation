@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<style>
+			.image-container {
+			display: flex;
+			}
+			.image-container img {
+			margin-right: 10px; /* 调整图片之间的间距 */
+			max-width: 100%; /* 图片最大宽度为容器的100% */
+			height: auto; /* 自动调整图片高度 */
+			}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						02/07/2024
+					</span>
+				</section>
+				<!-- Model Selection -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">None Bayes SegNet + MaSTr1325</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">SegNet with 50 Epochs</div>
+						<!-- Slide 1 val 128 -->
+						<div class="left-aligned-heading">
+							Jupter Notebook in GitHub: 
+						<a href="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/None-Bayes-SegNet/SegNet-MaSTr1325-prediction-display.ipynb">
+						<div class="left-aligned-heading">
+							Image val_001/val_144/val_192/val_240
+						</div></a>
+							
+						</div>
+					</section>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Bayes SegNet + MaSTr1325</div>
+					</section>
+
+					<section>
+						<div class="r-stack">
+							<!-- Slide 1 val 001 -->
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading" style="font-size: 120%;">Image val_001:</div>
+								<div class="image-container">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Ground-Truth/val_001_groundtruth_masked.png?raw=true">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/val_001_epoch400_masked.png?raw=true">
+								</div>
+							</span>
+							<!-- Slide 2 val 048 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading" style="font-size: 120%;">Image val_048:</div>
+								<div class="image-container">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Ground-Truth/val_048_groundtruth_masked.png?raw=true">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/val_048_epoch400_masked.png?raw=true">
+								</div>
+							</span>
+							</span>
+							<!-- Slide 3 val 096 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading" style="font-size: 120%;">Image val_096:</div>
+								<div class="image-container">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Ground-Truth/val_096_groundtruth_masked.png?raw=true">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/val_096_epoch400_masked.png?raw=true">
+								</div>
+							</span>
+							</span>
+							<!-- Slide 4 val 144 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading" style="font-size: 120%;">Image val_144:</div>
+								<div class="image-container">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Ground-Truth/val_144_groundtruth_masked.png?raw=true">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/val_144_epoch400_masked.png?raw=true">
+								</div>
+							</span>
+							</span>
+							<!-- Slide 4 val 240 -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading" style="font-size: 120%;">Image val_240:</div>
+								<div class="image-container">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Ground-Truth/val_240_groundtruth_masked.png?raw=true">
+									<img src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/val_240_epoch400_masked.png?raw=true">
+								</div>
+							</span>
+							</span>
+							<!--  -->
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<div class="left-aligned-heading" style="font-size: 120%;">Next Step:</div>
+								<img src="https://github.com/qimaqi/BNN_Seg/blob/main/BNN_seg_asset/CamVid/01results.png?raw=true" width="900" height="600">
+							</span>
+							</span>
+
+						</div>
+					</section>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
