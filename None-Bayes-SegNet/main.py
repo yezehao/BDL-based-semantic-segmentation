@@ -91,6 +91,11 @@ def val(model,val_dataloaders,epoch):
             with open(f'result/prediction/epoch_{epoch}_{os.path.basename(mask[0])}.json', 'w') as json_file:
                 json.dump(img_y.tolist(), json_file)
 
+            # target_files = ['001m.png', '048m.png', '096m.png', '144m.png', '192m.png', '240m.png']
+            # if os.path.basename(mask[0]) in target_files:
+            #     with open(f'result/prediction/epoch_{epoch}_{os.path.basename(mask[0])}.json', 'w') as json_file:
+            #         json.dump(img_y.tolist(), json_file)
+
             if i < num:i+=1 
 
         torch.save(model.state_dict(), r'./saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')

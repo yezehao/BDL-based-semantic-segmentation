@@ -1,12 +1,12 @@
 import torch.utils.data as data
 from torchvision import transforms
 import PIL.Image as Image
-from sklearn.model_selection import train_test_split
 import os
-import random
-import numpy as np
-from skimage.io import imread
 import glob
+import numpy as np
+# from sklearn.model_selection import train_test_split
+# from skimage.io import imread
+
     
 class MaSTr1325Dataset(data.Dataset):
     def __init__(self, state, transform=None, target_transform=None):
