@@ -19,7 +19,6 @@ from dataset import *
 from metrics import *
 from torchvision.transforms import transforms
 from plot import loss_plot
-from plot import metrics_plot
 from torchvision.models import vgg16
 
 # Args
@@ -165,7 +164,7 @@ def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
 def test(val_dataloaders,save_predict=False):
     logging.info('final test........')
     if save_predict ==True:
-        dir = os.path.join(r'./saved_predict',str(args.arch),str(args.batch_size),str(args.epoch),str(args.dataset))
+        dir = f'./saved_predict/{str(args.arch)}_{str(args.batch_size)}_{str(args.epoch)}_{str(args.dataset)}'
         if not os.path.exists(dir):
             os.makedirs(dir)
         else:
