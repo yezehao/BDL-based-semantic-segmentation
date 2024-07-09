@@ -11,6 +11,7 @@ Dataset/MaSTr1325/*
 # ================= #
 None-Bayes-SegNet/result/log/*
 None-Bayes-SegNet/result/prediction/*
+*.pth
 
 # ========================= #
 # Python GITIGNORE Template #
