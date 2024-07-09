@@ -4,6 +4,9 @@ from scipy.spatial.distance import directed_hausdorff
 import matplotlib.pyplot as plt
 from skimage.io import imread
 import imageio
+import json
+import os
+
 class IOUMetric:
     """
     Class to calculate mean-iou using fast_hist method
@@ -34,149 +37,76 @@ class IOUMetric:
         fwavacc = (freq[freq > 0] * iu[freq > 0]).sum()
         return acc, acc_cls, iu, mean_iu, fwavacc
 
-
-def get_iou(mask_name,predict):
-    image_mask = cv2.imread(mask_name,0)
-    if np.all(image_mask == None):
+# IOU（Intersection over Union）
+def get_iou(mask_name, predict):
+    image_mask = cv2.imread(mask_name, 0)
+    if image_mask is None:
         image_mask = imageio.mimread(mask_name)
         image_mask = np.array(image_mask)[0]
-        image_mask = cv2.resize(image_mask,(576,576))
-    #image_mask = mask
-    # print(image.shape)
-    height = predict.shape[0]
-    weight = predict.shape[1]
-    # print(height*weight)
-    o = 0
-    for row in range(height):
-            for col in range(weight):
-                if predict[row, col] < 0.5:  #由于输出的predit是0~1范围的，其中值越靠近1越被网络认为是肝脏目标，所以取0.5为阈值
-                    predict[row, col] = 0
-                else:
-                    predict[row, col] = 1
-                if predict[row, col] == 0 or predict[row, col] == 1:
-                    o += 1
-    height_mask = image_mask.shape[0]
-    weight_mask = image_mask.shape[1]
-    for row in range(height_mask):
-            for col in range(weight_mask):
-                if image_mask[row, col] < 125:   #由于mask图是黑白的灰度图，所以少于125的可以看作是黑色
-                    image_mask[row, col] = 0
-                else:
-                    image_mask[row, col] = 1
-                if image_mask[row, col] == 0 or image_mask[row, col] == 1:
-                    o += 1
-    predict = predict.astype(np.int16)
 
-    interArea = np.multiply(predict, image_mask)
-    tem = predict + image_mask
-    unionArea = tem - interArea
-    inter = np.sum(interArea)
-    union = np.sum(unionArea)
-    iou_tem = inter / union
+    max_predict = np.max(predict, axis=0)
+    predict_2d = np.argmax(predict, axis=0)
+    predict_2d[max_predict < 0.2] = 4
+    predict = predict_2d.astype(np.int16)
+    
+    labels = [0, 1, 2, 4]
+    iou = 0
+    for label in labels:
+        interArea = np.sum(np.multiply(predict == label, image_mask == label))
+        unionArea = np.sum(np.logical_or(predict == label, image_mask == label))
+        iou += interArea / unionArea
 
-    # Iou = IOUMetric(2)  #2表示类别，肝脏类+背景类
-    # Iou.add_batch(predict, image_mask)
-    # a, b, c, d, e= Iou.evaluate()
-    print('%s:iou=%f' % (mask_name,iou_tem))
+    iou = iou/4 # mean iou
+    print('Mean IOU: %f' % (iou))
+    return iou
 
-    return iou_tem
-
+# Dice-Sørensen coefficient
 def get_dice(mask_name,predict):
     image_mask = cv2.imread(mask_name, 0)
     if np.all(image_mask == None):
         image_mask = imageio.mimread(mask_name)
         image_mask = np.array(image_mask)[0]
-        image_mask = cv2.resize(image_mask,(576,576))
-    height = predict.shape[0]
-    weight = predict.shape[1]
-    o = 0
-    for row in range(height):
-        for col in range(weight):
-            if predict[row, col] < 0.5:  # 由于输出的predit是0~1范围的，其中值越靠近1越被网络认为是肝脏目标，所以取0.5为阈值
-                predict[row, col] = 0
-            else:
-                predict[row, col] = 1
-            if predict[row, col] == 0 or predict[row, col] == 1:
-                o += 1
-    height_mask = image_mask.shape[0]
-    weight_mask = image_mask.shape[1]
-    for row in range(height_mask):
-        for col in range(weight_mask):
-            if image_mask[row, col] < 125:  # 由于mask图是黑白的灰度图，所以少于125的可以看作是黑色
-                image_mask[row, col] = 0
-            else:
-                image_mask[row, col] = 1
-            if image_mask[row, col] == 0 or image_mask[row, col] == 1:
-                o += 1
-    predict = predict.astype(np.int16)
-    intersection = (predict*image_mask).sum()
-    dice = (2. *intersection) /(predict.sum()+image_mask.sum())
-    return dice
 
+    max_predict = np.max(predict, axis=0)
+    predict_2d = np.argmax(predict, axis=0)
+    predict_2d[max_predict < 0.2] = 4
+    predict = predict_2d.astype(np.int16)
+
+    labels = [0, 1, 2, 4]
+    dice = 0
+    for label in labels:
+        interArea = np.sum(np.multiply(predict == label, image_mask == label))
+        predictArea = np.sum(predict == label)
+        maskArea = np.sum(image_mask == label)
+        dice += (2. * interArea) / (predictArea + maskArea)
+
+    dice = dice/4 # mean dice
+    print('Dice-Sørensen coefficient: %f' % (dice))
+    return dice
+    
+
+# Hausdorff Distance
 def get_hd(mask_name,predict):
     image_mask = cv2.imread(mask_name, 0)
-    print(mask_name)
-    print(image_mask)
     if np.all(image_mask == None):
         image_mask = imageio.mimread(mask_name)
         image_mask = np.array(image_mask)[0]
-        image_mask = cv2.resize(image_mask,(576,576))
-    # #image_mask = mask
-    # height = predict.shape[0]
-    # weight = predict.shape[1]
-    # o = 0
-    # for row in range(height):
-    #     for col in range(weight):
-    #         if predict[row, col] < 0.5:  # 由于输出的predit是0~1范围的，其中值越靠近1越被网络认为是肝脏目标，所以取0.5为阈值
-    #             predict[row, col] = 0
-    #         else:
-    #             predict[row, col] = 1
-    #         if predict[row, col] == 0 or predict[row, col] == 1:
-    #             o += 1
-    # height_mask = image_mask.shape[0]
-    # weight_mask = image_mask.shape[1]
-    # for row in range(height_mask):
-    #     for col in range(weight_mask):
-    #         if image_mask[row, col] < 125:  # 由于mask图是黑白的灰度图，所以少于125的可以看作是黑色
-    #             image_mask[row, col] = 0
-    #         else:
-    #             image_mask[row, col] = 1
-    #         if image_mask[row, col] == 0 or image_mask[row, col] == 1:
-    #             o += 1
-    # hd1 = directed_hausdorff(image_mask, predict)[0]
-    # hd2 = directed_hausdorff(predict, image_mask)[0]
-    # res = None
-    # if hd1>hd2 or hd1 == hd2:
-    #     res=hd1
-    #     return res
-    # else:
-    #     res=hd2
-    #     return res
 
-    height, width = predict.shape[:2]
+    max_predict = np.max(predict, axis=0)
+    predict_2d = np.argmax(predict, axis=0)
+    predict_2d[max_predict < 0.2] = 4
 
-    # Threshold predict based on three classes: 0, 1, 2
-    predict = np.argmax(predict, axis=-1)
+    mask_points = np.column_stack(np.where((image_mask != 4)))
+    predict_points = np.column_stack(np.where(predict_2d != 4))
 
-    # Normalize image_mask to 0, 1, 2 classes (assuming your mask is already in 0, 1, 2 format)
-    image_mask = cv2.resize(image_mask, (width, height))
+    # res = np.sum(predict != image_mask)
+
+    hd1 = directed_hausdorff(mask_points, predict_points)[0]
+    hd2 = directed_hausdorff(predict_points, mask_points)[0]
+    res = max(hd1, hd2)
+    print('Hausdorff Distance of: %f' % (res))
     
-    # Compute Hausdorff distance for each class
-    hausdorff_distances = []
-    for class_val in range(3):
-        class_mask = (image_mask == class_val).astype(np.uint8)
-        class_predict = (predict == class_val).astype(np.uint8)
-        
-        if np.any(class_mask) and np.any(class_predict):
-            hd1 = directed_hausdorff(class_mask, class_predict)[0]
-            hd2 = directed_hausdorff(class_predict, class_mask)[0]
-            hausdorff_distances.append(max(hd1, hd2))
-        else:
-            # If one of the classes is missing in either prediction or mask, set a large distance
-            hausdorff_distances.append(float('inf'))
-    
-    # Return the maximum Hausdorff distance among all classes
-    return max(hausdorff_distances)
+    return res
 
 
 

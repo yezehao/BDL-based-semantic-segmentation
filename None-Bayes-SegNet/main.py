@@ -71,10 +71,12 @@ def getDataset(args):
         test_dataloaders = data.DataLoader(test_dataset, batch_size=1)
     return train_dataloaders,val_dataloaders,test_dataloaders
 
-def val(model,val_dataloaders,epoch):
+def val(model, best_iou, val_dataloaders):
     model= model.eval()
     with torch.no_grad():
         i=0 
+        miou_total = 0
+        dice_total = 0
         num = len(val_dataloaders)  # validation dataset length
         #print(num)
         for x, _,pic,mask in val_dataloaders:
@@ -86,25 +88,28 @@ def val(model,val_dataloaders,epoch):
                 img_y = torch.squeeze(y).cpu().numpy()  # convert into numpy
 
             print(f"The validation mask: /val_mask/{os.path.basename(mask[0])}")
-            # print(img_y)
-
-            with open(f'result/prediction/epoch_{epoch}_{os.path.basename(mask[0])}.json', 'w') as json_file:
-                json.dump(img_y.tolist(), json_file)
-
-            # target_files = ['001m.png', '048m.png', '096m.png', '144m.png', '192m.png', '240m.png']
-            # if os.path.basename(mask[0]) in target_files:
-            #     with open(f'result/prediction/epoch_{epoch}_{os.path.basename(mask[0])}.json', 'w') as json_file:
-            #         json.dump(img_y.tolist(), json_file)
-
-            if i < num:i+=1 
-
-        torch.save(model.state_dict(), r'./saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')
-        return mask
+            miou_total += get_iou(mask[0],img_y) 
+            dice_total += get_dice(mask[0],img_y)
+            if i < num:i+=1   
+                
+        aver_iou = miou_total / num
+        aver_dice = dice_total/num
+        print('Miou=%f,aver_dice=%f' % (aver_iou,aver_dice))
+        logging.info('Miou=%f,aver_dice=%f' % (aver_iou,aver_dice))
+        if aver_iou > best_iou:
+            print('aver_iou:{} > best_iou:{}'.format(aver_iou,best_iou))
+            logging.info('aver_iou:{} > best_iou:{}'.format(aver_iou,best_iou))
+            logging.info('===========>save best model!')
+            best_iou = aver_iou
+            print('===========>save best model!')
+            torch.save(model.state_dict(), r'./saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')
+        return best_iou,aver_iou,aver_dice #,aver_hd
     
 def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
     num_epochs = args.epoch
     threshold = args.threshold
     loss_list = []
+    average_list = []
     for epoch in range(num_epochs):
         model = model.train()
         print('Epoch {}/{}'.format(epoch, num_epochs-1))
@@ -142,9 +147,15 @@ def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
             logging.info("%d/%d,train_loss:%0.3f" % (step, (dt_size - 1) // train_dataloader.batch_size + 1, loss.item()))
         loss_list.append(epoch_loss)
 
-        _ = val(model,val_dataloader,epoch) # _ is mask
-        # with open(f'result/prediction/epoch_{epoch}_{os.path.basename(mask_name[0])}.json', 'w') as json_file:
-        #         json.dump(img_y.tolist(), json_file)
+        best_iou = 0
+        best_iou,aver_iou,aver_dice = val(model, best_iou, val_dataloader) # _ is mask
+        metrics = {
+            'aver_iou': aver_iou,
+            'aver_dice': aver_dice,
+        }
+        average_list.append(metrics)
+        with open('average.json', 'w') as f:
+            json.dump(average_list, f, indent=4)
                 
         print("epoch %d loss:%0.3f" % (epoch, epoch_loss))
         logging.info("epoch %d loss:%0.3f" % (epoch, epoch_loss))
