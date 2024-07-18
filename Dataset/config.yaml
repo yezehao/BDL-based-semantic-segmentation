@@ -1,9 +1,0 @@
-train_img_dir: ./Dataset/MaSTr1325/train
-train_mask_dir: ./Dataset/MaSTr1325/train_mask
-train_img_list: ./Dataset/MaSTr1325/train_images.txt
-val_img_dir: ./Dataset/MaSTr1325/val
-val_mask_dir: ./Dataset/MaSTr1325/val_mask
-val_img_list: ./Dataset/MaSTr1325/val_images.txt
-test_img_dir: ./Dataset/MaSTr1325/test
-test_mask_dir: ./Dataset/MaSTr1325/test_mask
-test_img_list: ./Dataset/MaSTr1325/test_images.txt
