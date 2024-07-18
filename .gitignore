@@ -5,6 +5,7 @@
 # Dataset GITIGNORE #
 # ================= #
 Dataset/MaSTr1325/*
+Dataset/MaSTr1325-test
 
 # ================= #
 # Results GITIGNORE #
