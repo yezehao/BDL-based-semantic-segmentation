@@ -1,7 +1,3 @@
-'''
-author:zhujunwen
-Guangdong University of Technology
-'''
 import argparse
 import logging
 import json
@@ -18,20 +14,19 @@ from model.segnet import SegNet
 from dataset import *
 from metrics import *
 from torchvision.transforms import transforms
-from plot import loss_plot
 from torchvision.models import vgg16
+
 
 # Args
 def getArgs():
     parse = argparse.ArgumentParser()
-    parse.add_argument('--deepsupervision', default=0)
     parse.add_argument("--action", type=str, help="train/test/train&test", default="train&test")
     parse.add_argument("--epoch", type=int, default=21)
-    parse.add_argument('--arch', '-a', metavar='ARCH', default='resnet34_unet',
-                       help='UNet/resnet34_unet/unet++/myChannelUnet/Attention_UNet/segnet/r2unet/fcn32s/fcn8s')
+    parse.add_argument('--arch', '-a', metavar='ARCH', default='segnet',
+                       help='UNet/myChannelUnet/segnet/r2unet')
     parse.add_argument("--batch_size", type=int, default=1)
-    parse.add_argument('--dataset', default='driveEye',  # dsb2018_256
-                       help='dataset name:liver/esophagus/dsb2018Cell/corneal/driveEye/isbiCell/kaggleLung')
+    parse.add_argument('--dataset', default='MaSTr1325', 
+                       help='dataset name:MaSTr1325')
     # parse.add_argument("--ckp", type=str, help="the path of model weight file")
     parse.add_argument("--log_dir", default='result/log', help="log dir")
     parse.add_argument("--threshold",type=float,default=None)
@@ -45,7 +40,7 @@ def getLog(args):
         os.makedirs(dirname)
     logging.basicConfig(
             filename=filename,
-            level=logging.DEBUG,
+            level=logging.INFO,
             format='%(asctime)s:%(levelname)s:%(message)s'
         )
     return logging
@@ -62,11 +57,11 @@ def getModel(args):
 def getDataset(args):
     train_dataloaders, val_dataloaders ,test_dataloaders= None,None,None
     if args.dataset == 'MaSTr1325':
-        train_dataset = MaSTr1325Dataset(r'train', transform=x_transforms, target_transform=y_transforms)
+        train_dataset = MaSTr1325Dataset('train', transform=x_transforms, target_transform=y_transforms)
         train_dataloaders = data.DataLoader(train_dataset, batch_size=args.batch_size)
-        val_dataset = MaSTr1325Dataset(r"val", transform=x_transforms, target_transform=y_transforms)
+        val_dataset = MaSTr1325Dataset("val", transform=x_transforms, target_transform=y_transforms)
         val_dataloaders = data.DataLoader(val_dataset, batch_size=1)
-        test_dataset = MaSTr1325Dataset(r"test", transform=x_transforms, target_transform=y_transforms)
+        test_dataset = MaSTr1325Dataset("test", transform=x_transforms, target_transform=y_transforms)
         test_dataloaders = data.DataLoader(test_dataset, batch_size=1)
     return train_dataloaders,val_dataloaders,test_dataloaders
 
@@ -74,26 +69,54 @@ def val(model, best_iou, val_dataloaders):
     model= model.eval()
     with torch.no_grad():
         i=0 
-        miou_total = 0
-        dice_total = 0
+        threshold = 0.2
+        Prs, Res, F1 = 0, 0, 0
+        miou_total, dice_total = 0, 0
         num = len(val_dataloaders)  # validation dataset length
         #print(num)
         for x, _,pic,mask in val_dataloaders:
             x = x.to(device)
             y = model(x)
-            if args.deepsupervision:
-                img_y = torch.squeeze(y[-1]).cpu().numpy()
-            else:
-                img_y = torch.squeeze(y).cpu().numpy()  # convert into numpy
 
-            print(f"The validation mask: /val_mask/{os.path.basename(mask[0])}")
+            print(f"Validation: /val_mask/{os.path.basename(mask[0])}")
+
+            # IOU & Dice Coeffeciency
+            img_y = torch.squeeze(y).cpu().numpy()  # convert into numpy
             miou_total += get_iou(mask[0],img_y) 
             dice_total += get_dice(mask[0],img_y)
+
+            # Precision / Recall / F1
+            y_value, prediction = torch.max(y, dim=0)
+            prediction[y_value < threshold] = 4
+            GT_mask = Image.open(mask[0])
+            transform = transforms.ToTensor()
+            GT = transform(GT_mask).to(device)
+            # True Positives (TPs)
+            TP =  (GT == 0) & (prediction == 0)
+            TPs = TP.sum().item()
+            # False Positives (FPs)
+            FP = (GT != 0) & (prediction == 0)
+            FPs = FP.sum().item()
+            # False Negatives (FNs)
+            FN = (GT == 0) & (prediction != 0)
+            FNs = FN.sum().item()
+            Pr = TPs/(TPs + FPs) # Precision (Pr)
+            Re = TPs/(TPs + FNs) # Recall (Re)
+            F1 += 2*Pr*Re/(Pr + Re) # Harmonic Mean F1
+            Prs += Pr
+            Res += Re
+
             if i < num:i+=1   
                 
-        aver_iou = miou_total / num
+        # Mean
+        Prs = Prs/num
+        Res = Res/num
+        F1 = F1/num
+        aver_iou = miou_total/ num
         aver_dice = dice_total/num
+        print('Precision=%.5f, Recall=%.5f, F1=%.5f' % (Prs,Res,F1))
         print('Miou=%f,aver_dice=%f' % (aver_iou,aver_dice))
+        logging.info('Precision=%.5f, Recall=%.5f, F1=%.5f' % (Prs,Res,F1))
         logging.info('Miou=%f,aver_dice=%f' % (aver_iou,aver_dice))
         if aver_iou > best_iou:
             print('aver_iou:{} > best_iou:{}'.format(aver_iou,best_iou))
@@ -101,8 +124,8 @@ def val(model, best_iou, val_dataloaders):
             logging.info('===========>save best model!')
             best_iou = aver_iou
             print('===========>save best model!')
-            torch.save(model.state_dict(), r'./saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')
-        return best_iou,aver_iou,aver_dice #,aver_hd
+            torch.save(model.state_dict(), r'./result/saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')
+        return best_iou,aver_iou,aver_dice, Prs, Res, F1
     
 def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
     num_epochs = args.epoch
@@ -123,15 +146,8 @@ def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
             labels = y.to(device)
             # zero the parameter gradients
             optimizer.zero_grad()
-            if args.deepsupervision:
-                outputs = model(inputs)
-                loss = 0
-                for output in outputs:
-                    loss += criterion(output, labels)
-                loss /= len(outputs)
-            else:
-                output = model(inputs)
-                loss = criterion(output, labels)
+            output = model(inputs)
+            loss = criterion(output, labels)
             if threshold!=None:
                 if loss > threshold:
                     loss.backward()
@@ -147,13 +163,16 @@ def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
         loss_list.append(epoch_loss)
 
         best_iou = 0
-        best_iou,aver_iou,aver_dice = val(model, best_iou, val_dataloader) # _ is mask
+        best_iou,aver_iou,aver_dice, Prs, Res, F1 = val(model, best_iou, val_dataloader) # _ is mask
         metrics = {
             'aver_iou': aver_iou,
             'aver_dice': aver_dice,
+            'Prs': Prs,
+            'Res': Res, 
+            'F1': F1,
         }
         average_list.append(metrics)
-        with open('average.json', 'w') as f:
+        with open(f'./result/validation-epoch{args.epoch}.json', 'w') as f:
             json.dump(average_list, f, indent=4)
                 
         print("epoch %d loss:%0.3f" % (epoch, epoch_loss))
@@ -164,55 +183,29 @@ def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
 def test(val_dataloaders,save_predict=False):
     logging.info('final test........')
     if save_predict ==True:
-        dir = f'./saved_predict/{str(args.arch)}_{str(args.batch_size)}_{str(args.epoch)}_{str(args.dataset)}'
+        dir = f'./result/testing/{str(args.arch)}_{str(args.batch_size)}_{str(args.epoch)}_{str(args.dataset)}'
         if not os.path.exists(dir):
             os.makedirs(dir)
         else:
             print('dir already exist!')
-    model.load_state_dict(torch.load(r'./saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth', map_location='cpu'))  # 载入训练好的模型
+    model.load_state_dict(torch.load(r'./result/saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth', map_location='cpu'))  # 载入训练好的模型
     model.eval()
 
-    #plt.ion() #开启动态模式
     with torch.no_grad():
         i=0 
         num = len(val_dataloaders) 
-        for pic,_,pic_path,mask_path in val_dataloaders:
+        for pic,_,pic_path,mask_path in test_dataloaders:
+            img_number = os.path.basename(mask_path[0])
+            img_number = img_number[:-5]
             pic = pic.to(device)
-            predict = model(pic)
-            if args.deepsupervision:
-                predict = torch.squeeze(predict[-1]).cpu().numpy()
-            else:
-                predict = torch.squeeze(predict).cpu().numpy()  # convert into numpy
+            prediction = model(pic)
+            prediction = torch.squeeze(prediction).cpu().numpy()
 
-            fig = plt.figure()
-            ax1 = fig.add_subplot(2, 3, 1)
-            ax1.set_title('input')
-            plt.imshow(Image.open(pic_path[0]))
-            #print(pic_path[0])
-            ax2 = fig.add_subplot(2, 3, 2)
-            ax2.set_title('predict')
-            plt.imshow(predict,cmap='Greys_r')
-            ax3 = fig.add_subplot(2, 3, 4)
-            ax3.set_title('mask_0')
-            plt.imshow(Image.open(mask_path[0]), cmap='Greys_r')
-            ax4 = fig.add_subplot(2, 3, 5)
-            ax4.set_title('mask_1')
-            plt.imshow(Image.open(mask_path[1]), cmap='Greys_r')            
-            ax5 = fig.add_subplot(2, 3, 6)
-            ax5.set_title('mask_2')
-            plt.imshow(Image.open(mask_path[2]), cmap='Greys_r')
-            #print(mask_path[0])
-            if save_predict == True:
-                if args.dataset == 'driveEye':
-                    saved_predict = dir + '/' + mask_path[0].split('\\')[-1]
-                    saved_predict = '.'+saved_predict.split('.')[1] + '.tif'
-                    plt.savefig(saved_predict)
-                else:
-                    plt.savefig(dir +'/'+ mask_path[0].split('\\')[-1])
-            #plt.pause(0.01)
+            # root = "../Dataset/MaSTr1325"
+            root = "../Dataset/MaSTr1325-test"
+            test_show(root, threshold=0.2, img_number=img_number, prediction=prediction)
 
-            if i < num:i+=1   #处理验证集下一张图
-        plt.show()
+            if i < num:i+=1 
 
 
 if __name__ =="__main__":

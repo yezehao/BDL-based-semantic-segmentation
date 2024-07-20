@@ -11,12 +11,14 @@ import numpy as np
 class MaSTr1325Dataset(data.Dataset):
     def __init__(self, state, transform=None, target_transform=None):
         self.state = state
-        self.train_root = r"../Dataset/MaSTr1325/train"
-        self.test_root  = r"../Dataset/MaSTr1325/test"
-        self.val_root   = r"../Dataset/MaSTr1325/val"
-        self.train_mask_root = r"../Dataset/MaSTr1325/train_mask"
-        self.test_mask_root  = r"../Dataset/MaSTr1325/test_mask"
-        self.val_mask_root   = r"../Dataset/MaSTr1325/val_mask"
+        # self.root = "../Dataset/MaSTr1325"
+        self.root = "../Dataset/MaSTr1325-test"
+        self.train_root = f"{self.root}/train"
+        self.test_root  = f"{self.root}/test"
+        self.val_root   = f"{self.root}/val"
+        self.train_mask_root = f"{self.root}/train_mask"
+        self.test_mask_root  = f"{self.root}/test_mask"
+        self.val_mask_root   = f"{self.root}/val_mask"
         self.pics,self.masks = self.getDataPath()
         self.transform = transform
         self.target_transform = target_transform
@@ -34,8 +36,8 @@ class MaSTr1325Dataset(data.Dataset):
             img_root = self.test_root
             mask_root = self.test_mask_root
 
-        img_files = sorted(glob.glob(img_root + '/*.jpg'))
-        mask_files = sorted(glob.glob(mask_root + '/*.png')) 
+        # img_files = sorted(glob.glob(img_root + '/*.jpg'))
+        # mask_files = sorted(glob.glob(mask_root + '/*.png')) 
 
         pics = []
         masks = []
@@ -60,9 +62,6 @@ class MaSTr1325Dataset(data.Dataset):
         origin_y = np.stack([origin_y==0, origin_y==1, origin_y==2], axis=-1).astype(np.float32)
         # print(f"{self.state} Dimension: {origin_y.ndim}")
         
-        # origin_y = Image.open(y_path)
-        # origin_x = cv2.imread(x_path)
-        # origin_y = cv2.imread(y_path,cv2.COLOR_BGR2GRAY)
         if self.transform is not None:
             img_x = self.transform(origin_x)
         if self.target_transform is not None:

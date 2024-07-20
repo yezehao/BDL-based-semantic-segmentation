@@ -6,6 +6,7 @@ from skimage.io import imread
 import imageio
 import json
 import os
+from PIL import Image
 
 class IOUMetric:
     """
@@ -57,7 +58,7 @@ def get_iou(mask_name, predict):
         iou += interArea / unionArea
 
     iou = iou/4 # mean iou
-    print('Mean IOU: %f' % (iou))
+    # print('Mean IOU: %f' % (iou))
     return iou
 
 # Dice-Sørensen coefficient
@@ -81,40 +82,87 @@ def get_dice(mask_name,predict):
         dice += (2. * interArea) / (predictArea + maskArea)
 
     dice = dice/4 # mean dice
-    print('Dice-Sørensen coefficient: %f' % (dice))
+    # print('Dice-Sørensen coefficient: %f' % (dice))
     return dice
     
 
-# Hausdorff Distance
-def get_hd(mask_name,predict):
-    image_mask = cv2.imread(mask_name, 0)
-    if np.all(image_mask == None):
-        image_mask = imageio.mimread(mask_name)
-        image_mask = np.array(image_mask)[0]
+def test_show(root, threshold, img_number, prediction):
+    # Path
+    jpg_path = os.path.join(root, f'test/{img_number}.jpg')
+    GT_path = os.path.join(root, f'test_mask/{img_number}m.png') # Groud Truth
 
-    max_predict = np.max(predict, axis=0)
-    predict_2d = np.argmax(predict, axis=0)
-    predict_2d[max_predict < 0.2] = 4
+    # Define Colour
+    colors = {
+        0: (247, 195, 37, 128),    # yellow (RGBA) = obstacle & environment
+        1: (41, 167, 224, 128),    # cyan-blue (RGBA) = water
+        2: (90, 75, 164, 128),     # purple (RGBA) = sky
+        3: (255, 0, 0, 128)        # red (RGBA) = unknown
+    }
 
-    mask_points = np.column_stack(np.where((image_mask != 4)))
-    predict_points = np.column_stack(np.where(predict_2d != 4))
-
-    # res = np.sum(predict != image_mask)
-
-    hd1 = directed_hausdorff(mask_points, predict_points)[0]
-    hd2 = directed_hausdorff(predict_points, mask_points)[0]
-    res = max(hd1, hd2)
-    print('Hausdorff Distance of: %f' % (res))
-    
-    return res
-
+    # Original JPG Image
+    image = Image.open(jpg_path).convert('RGBA')
+    # Prediction Segmentation
+    mask_array = np.array(prediction)
+    mask_array = np.transpose(mask_array, (1, 2, 0))
+    mask_indices = np.argmax(mask_array, axis=2)
+    mask_values = np.max(mask_array, axis=2)
+    mask_indices[mask_values < threshold] = 3
 
 
-def show(predict):
-    height = predict.shape[0]
-    weight = predict.shape[1]
-    for row in range(height):
-        for col in range(weight):
-            predict[row, col] *= 255
-    plt.imshow(predict)
-    plt.show()
+    mask_image = Image.new('RGBA', image.size)
+    mask_pixels = mask_image.load()
+    for y in range(mask_indices.shape[0]):
+        for x in range(mask_indices.shape[1]):
+            value = mask_indices[y, x]
+            if value in colors:
+                mask_pixels[x, y] = colors[value]
+
+    # Ground Truth
+    GT_mask = Image.open(GT_path)
+    GT = np.array(GT_mask)
+    GT[GT==4] = 3
+
+    mask_gt = Image.new('RGBA', image.size)
+    gt_pixels = mask_gt.load()
+    for y in range(GT.shape[0]):
+        for x in range(GT.shape[1]):
+            value = GT[y, x]
+            if value in colors:
+                gt_pixels[x, y] = colors[value]
+
+    # apply mask to jpg
+    combined_pred = Image.alpha_composite(image, mask_image)
+    combined_gt = Image.alpha_composite(image, mask_gt)
+
+    # Plotting
+    plt.figure(figsize=(12, 5))
+
+    # Predicted segmentation
+    plt.subplot(1, 2, 1)
+    plt.imshow(combined_pred)
+    plt.title(f'Predicted Segmentation')
+    plt.axis('off')
+
+    # Ground truth segmentation
+    plt.subplot(1, 2, 2)
+    plt.imshow(combined_gt)
+    plt.title(f'Ground Truth Segmentation')
+    plt.axis('off')
+
+    plt.tight_layout()
+    plot_path = f"result/testing/{img_number}.png"
+    plt.savefig(plot_path)
+
+    print(f"Testing Image: {img_number}")
+
+def loss_plot(args,loss):
+    num = args.epoch
+    x = [i for i in range(num)]
+    plot_save_path = r'result/training'
+    if not os.path.exists(plot_save_path):
+        os.makedirs(plot_save_path)
+    save_loss = plot_save_path+'loss_'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.jpg'
+    plt.figure()
+    plt.plot(x,loss,label='loss')
+    plt.legend()
+    plt.savefig(save_loss)
