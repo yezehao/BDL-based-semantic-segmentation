@@ -1,4 +1,10 @@
-# # Gantt Chart
+# BDL based Sematic Segmentation
+![GitHub License](https://img.shields.io/github/license/yezehao/BDL-based-semantic-segmentation)
+![GitHub last commit](https://img.shields.io/github/last-commit/yezehao/BDL-based-semantic-segmentation)
+![GitHub top language](https://img.shields.io/github/languages/top/yezehao/BDL-based-semantic-segmentation)
+
+
+## Gantt Chart
 ```mermaid
 gantt
     dateFormat  YYYY-MM-DD
