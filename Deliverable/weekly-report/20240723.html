@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						23/07/2024
+					</span>
+				</section>
+				<!-- IOU / Dice -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Evaluation Portocol</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Distinct Challenges of USVs
+						</div><br>
+						<div class="left-aligned-heading"> 
+							<li>Water Edge / Shoreline Detection</li>
+							<li>Obstacle Detection</li>
+						</div>
+						<a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7073635">
+						<div class="left-aligned-heading">
+						<p class="small-text">
+						@article{kristan2015fast, <br>
+							title={Fast image-based obstacle detection from unmanned surface vehicles},<br>
+							author={Kristan, Matej and Kenk, Vildana Sulič and Kovačič, Stanislav and Perš, Janez},<br>
+							journal={IEEE transactions on cybernetics},<br>
+							volume={46},<br>
+							number={3},<br>
+							pages={641--654},<br>
+							year={2015},<br>
+							publisher={IEEE}}
+						</p></div></a>
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> Shoreline Detection</div>
+						<img data-fragment-index="0" src="https://box.vicos.si/borja/viamaro/images/modd2/annotation_1.png" width="700" height="500">
+					</section>
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> Obstacle Detection</div>
+						<div class="left-aligned-heading"><p>
+							<li>Precisions:  $\text{Pr} = \frac{\text{TP}}{\text{TP}+\text{FP}}$</li><br>
+							<li>Recalls:  $\text{Re} = \frac{\text{TP}}{\text{TP}+\text{FN}}$</li><br>
+							<li>harmonic mean F1:  $\text{F1} = \frac{2\cdot\text{Pr}\cdot\text{Re}}{\text{Pr}+\text{Re}}$</li><br>
+						</p></div>
+						<a href="https://ieeexplore.ieee.org/document/9477208">
+						<div class="left-aligned-heading">
+						<p class="small-text">
+						@article{9477208,<br>
+							author={Bovcon, Borja and Kristan, Matej},<br>
+							journal={IEEE Transactions on Cybernetics}, <br>
+							title={WaSR—A Water Segmentation and Refinement Maritime Obstacle Detection Network}, <br>
+							keywords={Semantic segmentation;Autonomous vehicles;Deep learning;Image segmentation;Feature extraction;Deep learning;obstacle detection;semantic segmentation;separation loss;unmanned surface vehicles (USVs)},<br>
+							doi={10.1109/TCYB.2021.3085856}}
+						</p></div></a>
+
+					</section>
+				</section>
+
+				<!-- None Bayes -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">None Bayesian SegNet</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">None Bayesian SegNet</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/None-Bayes-SegNet/result/training/loss_segnet_1_MaSTr1325_200.jpg?raw=true">
+								<div style="font-size: 80%;">Training Loss</div>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/iou-dice-epoch200.png?raw=true">
+								<div style="font-size: 80%;">Validation: iou + dice</div>
+							</span>
+							</span>
+							<span class="fragment fade-in">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/evaluation-epoch200.png?raw=true">
+								<div style="font-size: 80%;">Evaluation: Precisions / Recalls / F1</div>
+							</span>		
+						</div>
+					</section>
+				</section>
+
+				<!-- Bayes -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Bayesian SegNet</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;">Bayesian SegNet</div>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/bayessegnet_trainloss_epoch.png?raw=true">
+								<div style="font-size: 80%;">Training Loss / epoch</div>
+							</span>	
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/evaluation_precisions_over_epochs.png?raw=true">
+								<div style="font-size: 80%;">Evaluation: Precisions / Recalls / F1</div>
+							</span>
+							</span>	
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/test_054.png?raw=true" width="800" height="600">
+							</span>
+							</span>	
+							<span class="fragment fade-in">
+								<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-BDL/test_070.png?raw=true" width="800" height="600">
+							</span>	
+						</div>
+					</section>
+
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
