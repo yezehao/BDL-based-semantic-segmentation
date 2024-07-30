@@ -84,6 +84,29 @@ def get_dice(mask_name,predict):
     dice = dice/4 # mean dice
     # print('Dice-Sørensen coefficient: %f' % (dice))
     return dice
+
+def get_precision(mask_name, predict): # Precision / Recall / F1
+    image_mask = cv2.imread(mask_name, 0)
+    if np.all(image_mask == None):
+        image_mask = imageio.mimread(mask_name)
+        image_mask = np.array(image_mask)[0]
+
+    max_predict = np.max(predict, axis=0)
+    predict_2d = np.argmax(predict, axis=0)
+    predict_2d[max_predict < 0.6] = 4
+    predict = predict_2d.astype(np.int16)
+
+    # True Positives (TPs)
+    TP =  np.sum(np.multiply(predict == 0, image_mask == 0))
+    # False Positives (FPs)
+    FP = np.sum(np.multiply(predict == 0, image_mask != 0))
+    # False Negatives (FNs)
+    FN = np.sum(np.multiply(predict != 0, image_mask == 0))
+    Pr = 0 if (TP + FP) == 0 else TP/(TP + FP) # Precision (Pr)
+    Re = 0 if (TP + FN) == 0 else TP/(TP + FN) # Recall (Re)
+    F1 = 0 if (Pr + Re) == 0 else 2*Pr*Re/(Pr + Re) # Harmonic Mean F1
+
+    return Pr, Re, F1
     
 
 def test_show(root, threshold, img_number, prediction):

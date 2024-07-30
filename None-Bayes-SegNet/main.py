@@ -5,6 +5,7 @@ import torch
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torch import autograd, optim
+from tqdm import tqdm
 
 # Model Modules
 from model.UNet import Unet
@@ -69,54 +70,35 @@ def val(model, best_iou, val_dataloaders):
     model= model.eval()
     with torch.no_grad():
         i=0 
-        threshold = 0.2
-        Prs, Res, F1 = 0, 0, 0
+        Prs, Res, F1s = 0, 0, 0
         miou_total, dice_total = 0, 0
         num = len(val_dataloaders)  # validation dataset length
         #print(num)
-        for x, _,pic,mask in val_dataloaders:
-            x = x.to(device)
-            y = model(x)
-
-            print(f"Validation: /val_mask/{os.path.basename(mask[0])}")
-
-            # IOU & Dice Coeffeciency
-            img_y = torch.squeeze(y).cpu().numpy()  # convert into numpy
-            miou_total += get_iou(mask[0],img_y) 
-            dice_total += get_dice(mask[0],img_y)
-
-            # Precision / Recall / F1
-            y_value, prediction = torch.max(y, dim=0)
-            prediction[y_value < threshold] = 4
-            GT_mask = Image.open(mask[0])
-            transform = transforms.ToTensor()
-            GT = transform(GT_mask).to(device)
-            # True Positives (TPs)
-            TP =  (GT == 0) & (prediction == 0)
-            TPs = TP.sum().item()
-            # False Positives (FPs)
-            FP = (GT != 0) & (prediction == 0)
-            FPs = FP.sum().item()
-            # False Negatives (FNs)
-            FN = (GT == 0) & (prediction != 0)
-            FNs = FN.sum().item()
-            Pr = TPs/(TPs + FPs) # Precision (Pr)
-            Re = TPs/(TPs + FNs) # Recall (Re)
-            F1 += 2*Pr*Re/(Pr + Re) # Harmonic Mean F1
-            Prs += Pr
-            Res += Re
-
-            if i < num:i+=1   
+        with tqdm(total=num, desc="Validation", unit="batch") as pbar:
+            for x, _,pic,mask in val_dataloaders:
+                x = x.to(device)
+                y = model(x)
+                # print(f"Validation: /val_mask/{os.path.basename(mask[0])}")
+    
+                # IOU & Dice Coeffeciency
+                img_y = torch.squeeze(y).cpu().numpy()  # convert into numpy
+                miou_total += get_iou(mask[0],img_y) 
+                dice_total += get_dice(mask[0],img_y)
+                # Precision / Recall / F1
+                Pr, Re, F1 = get_precision(mask[0],img_y)
+                Prs, Res, F1s = Prs + Pr, Res + Re, F1s + F1
+                # Increment progress bar by one step
+                pbar.update(1)    
                 
         # Mean
         Prs = Prs/num
         Res = Res/num
-        F1 = F1/num
+        F1s = F1s/num
         aver_iou = miou_total/ num
         aver_dice = dice_total/num
-        print('Precision=%.5f, Recall=%.5f, F1=%.5f' % (Prs,Res,F1))
+        print('Precision=%.5f, Recall=%.5f, F1=%.5f' % (Prs,Res,F1s))
         print('Miou=%f,aver_dice=%f' % (aver_iou,aver_dice))
-        logging.info('Precision=%.5f, Recall=%.5f, F1=%.5f' % (Prs,Res,F1))
+        logging.info('Precision=%.5f, Recall=%.5f, F1=%.5f' % (Prs,Res,F1s))
         logging.info('Miou=%f,aver_dice=%f' % (aver_iou,aver_dice))
         if aver_iou > best_iou:
             print('aver_iou:{} > best_iou:{}'.format(aver_iou,best_iou))
@@ -124,8 +106,8 @@ def val(model, best_iou, val_dataloaders):
             logging.info('===========>save best model!')
             best_iou = aver_iou
             print('===========>save best model!')
-            torch.save(model.state_dict(), r'./result/saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')
-        return best_iou,aver_iou,aver_dice, Prs, Res, F1
+            torch.save(model.state_dict(), r'./saved_model/'+str(args.arch)+'_'+str(args.batch_size)+'_'+str(args.dataset)+'_'+str(args.epoch)+'.pth')
+        return best_iou,aver_iou,aver_dice, Prs, Res, F1s
     
 def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
     num_epochs = args.epoch
@@ -163,13 +145,13 @@ def train(model, criterion, optimizer, train_dataloader,val_dataloader, args):
         loss_list.append(epoch_loss)
 
         best_iou = 0
-        best_iou,aver_iou,aver_dice, Prs, Res, F1 = val(model, best_iou, val_dataloader) # _ is mask
+        best_iou,aver_iou,aver_dice, Prs, Res, F1s = val(model, best_iou, val_dataloader) # _ is mask
         metrics = {
             'aver_iou': aver_iou,
             'aver_dice': aver_dice,
             'Prs': Prs,
             'Res': Res, 
-            'F1': F1,
+            'F1': F1s,
         }
         average_list.append(metrics)
         with open(f'./result/validation-epoch{args.epoch}.json', 'w') as f:
