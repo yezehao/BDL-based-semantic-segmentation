@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<style>
+			.left-aligned-heading {text-align: left}
+			.small-text {font-size: 16px}
+			.image-container {display: flex}
+			.image-container img {margin-right: 10px}
+		</style>
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Cover Page -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<span style="color:#d7defc;">
+						<h3>PROJ00114PG Bayesian Deep Learning</h3>   
+						Marine Environment Segmentation
+					</span>
+					<br>
+					<span style="color:#d7defc;">
+						30/07/2024
+					</span>
+				</section>
+				<!-- Correction -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">None Bayesian SegNet Evaluation</div>
+					</section>
+
+					<section>
+					<div class="left-aligned-heading" style="font-size: 120%;"> 
+						Error Correction in Evaluation
+					</div><br>
+					<div class="r-stack">
+						<span class="fragment fade-out">
+							<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/evaluation-epoch200.png?raw=true">
+							<div style="font-size: 80%;">Evaluation: Precisions / Recalls / F1</div>
+						</span>		
+						<span class="fragment fade-in">
+							<img data-fragment-index="0" src="https://github.com/yezehao/BDL-based-semantic-segmentation/blob/main/Results/Prediction-SegNet/evaluation-epoch100.png?raw=true">
+							<div style="font-size: 80%;">Evaluation: Precisions / Recalls / F1</div>
+						</span>	
+					</div>
+					</section>
+				</section>
+
+				<!-- BDL advantage -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Necessarity of Bayesian SegNet<br>in Marine Semantic Segmentation </div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Bayesian SegNet
+						</div><br>
+						<div class="left-aligned-heading"> 
+							<li>Uncertainty Estimation</li>
+							<li>Noise and Distortion Reduction</li>
+							<li>Training Efficiency</li>
+						</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Uncertainty Estimation
+						</div><br>
+						<div class="r-stack">
+							<span class="fragment fade-out">
+							<div class="left-aligned-heading"> 
+							Why important for MESS?
+								<li>Variable marine weather</li>
+								<li>Noise and distortion</li>
+								<li>Scarcity of datasets for USVs</li>
+							</div>
+							</span>
+
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+							<a href="https://proceedings.neurips.cc/paper_files/paper/2017/file/2650d6089a6d640c5e85b2b88265dc2b-Paper.pdf">
+							<div class="left-aligned-heading">
+							"If both these algorithms were able to assign a high level of uncertainty to their erroneous predictions, then the system may have been able to make better decisions and likely avoid disaster."
+							</div></a>
+							</span>
+							</span>
+							<span class="fragment fade-in">
+							<span class="fragment fade-out">
+							<div class="left-aligned-heading">
+								In scenarios with limited training data, uncertainty estimation can help the model generalize better to unseen data and reduce the risk of overfitting.
+							</div>
+							</span>
+							</span>
+
+							<span class="fragment fade-in">
+							<div class="left-aligned-heading">
+							MaSTr1325 dataset: 
+							<a href="https://www.vicos.si/resources/mastr1325/">
+							<div class="left-aligned-heading">
+							"the USV was manually guided in the gulf of Koper, Slovenia,"
+							</div></a>
+							Ocean AI Segmentation Initiatives (OASIs) dataset
+							<a href="https://www.navlue.com/images/dataset/annotation_file.png">
+							<div class="left-aligned-heading">
+							Example
+							</div></a>
+							</span>
+						</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Noise and Distortion
+						</div><br>
+						<div class="left-aligned-heading"> 
+							<li>Uncertainty Estimation</li>
+							<li>Model Averaging</li>
+						</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Training Efficiency
+						</div><br>
+						<div class="left-aligned-heading"> 
+							"We remove the fully connected layers of VGG16 which makes the SegNet encoder network significantly smaller and easier to train than many other recent architectures."
+						</div>
+						<a href="https://www.navlue.com/images/dataset/annotation_file.png">
+						<div class="left-aligned-heading">
+						<p class="small-text">
+						@ARTICLE{7803544, <br>
+							author={Badrinarayanan, Vijay and Kendall, Alex and Cipolla, Roberto},<br>
+							journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, <br>
+							title={SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation}, <br>
+							year={2017},<br>
+							volume={39},<br>
+							number={12},<br>
+							pages={2481-2495},<br>
+							keywords={Decoding;Neural networks;Training;Computer architecture;Image segmentation;Semantics;Convolutional codes;Deep convolutional neural networks;semantic pixel-wise segmentation;indoor scenes;road scenes;encoder;decoder;pooling;upsampling},<br>
+							doi={10.1109/TPAMI.2016.2644615}}
+						</p></div></a>
+					</section>
+				</section>
+
+				<!-- two uncertainty -->
+				<section data-background-gradient="linear-gradient(to bottom, #00307E, #000000)">
+					<section>
+						<div style="font-size: 150%;">Epistemic Uncertainty<br>Aleatoric Uncertainty</div>
+					</section>
+
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Epistemic Uncertainty
+						</div><br>
+						The Epistemic Uncertainty is the uncertainty of Model. <br><br>
+						<a href="https://proceedings.neurips.cc/paper_files/paper/2017/file/2650d6089a6d640c5e85b2b88265dc2b-Paper.pdf">
+						<div class="left-aligned-heading">
+						"Epistemic uncertainty in the weights can be reduced by observing more data."
+						</div></a><br>
+						Change the scale of dataset / training epoch
+					</section>
+	
+					<section>
+						<div class="left-aligned-heading" style="font-size: 120%;"> 
+							Aleatoric Uncertainty
+						</div><br>
+						<a href="https://proceedings.neurips.cc/paper_files/paper/2017/file/2650d6089a6d640c5e85b2b88265dc2b-Paper.pdf">
+						<div class="left-aligned-heading">
+						"Aleatoric uncertainty captures noise inherent in the observations."
+						</div></a><br>
+						change the resolution of images / introduce artificial noise
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ],
+				progress: true,
+				touch: true,
+			});
+		</script>
+	</body>
+</html>
