@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from scipy.spatial.distance import directed_hausdorff
 import matplotlib.pyplot as plt
 from skimage.io import imread
 import imageio
@@ -109,7 +108,7 @@ def get_precision(mask_name, predict): # Precision / Recall / F1
     return Pr, Re, F1
     
 
-def test_show(root, threshold, img_number, prediction):
+def test_show(root, threshold, img_number, prediction,dataset):
     # Path
     jpg_path = os.path.join(root, f'test/{img_number}.jpg')
     GT_path = os.path.join(root, f'test_mask/{img_number}m.png') # Groud Truth
@@ -124,6 +123,7 @@ def test_show(root, threshold, img_number, prediction):
 
     # Original JPG Image
     image = Image.open(jpg_path).convert('RGBA')
+    resized_image = image.resize((512, 384))
     # Prediction Segmentation
     mask_array = np.array(prediction)
     mask_array = np.transpose(mask_array, (1, 2, 0))
@@ -154,7 +154,7 @@ def test_show(root, threshold, img_number, prediction):
                 gt_pixels[x, y] = colors[value]
 
     # apply mask to jpg
-    combined_pred = Image.alpha_composite(image, mask_image)
+    combined_pred = Image.alpha_composite(resized_image, mask_image)
     combined_gt = Image.alpha_composite(image, mask_gt)
 
     # Plotting
@@ -173,7 +173,7 @@ def test_show(root, threshold, img_number, prediction):
     plt.axis('off')
 
     plt.tight_layout()
-    plot_path = f"result/testing/{img_number}.png"
+    plot_path = f"result/testing/{dataset}/{img_number}.png"
     plt.savefig(plot_path)
 
     print(f"Testing Image: {img_number}")

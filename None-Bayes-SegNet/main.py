@@ -183,9 +183,9 @@ def test(val_dataloaders,save_predict=False):
             prediction = model(pic)
             prediction = torch.squeeze(prediction).cpu().numpy()
 
-            # root = "../Dataset/MaSTr1325"
-            root = "../Dataset/MaSTr1325-test"
-            test_show(root, threshold=0.2, img_number=img_number, prediction=prediction)
+            dataset="MaSTr1325"
+            root = f"../Dataset/{dataset}"
+            test_show(root, threshold=0.2, img_number=img_number, prediction=prediction, dataset=dataset)
 
             if i < num:i+=1 
 
@@ -195,10 +195,6 @@ if __name__ =="__main__":
         transforms.ToTensor(),  # -> [0,1]
         transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])  # ->[-1,1]
     ])
-    x_transforms = transforms.Compose([
-        transforms.ToTensor(),  # -> [0,1]
-        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])  # ->[-1,1]
-        ])
 
     # mask tranfrom to tensor
     y_transforms = transforms.ToTensor()
