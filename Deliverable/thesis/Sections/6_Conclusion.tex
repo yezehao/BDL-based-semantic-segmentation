@@ -1,0 +1,37 @@
+\section{Conclusion}
+\label{section:conclusion}
+This study aimed to enhance semantic segmentation for USVs by utilizing Bayesian SegNet to provide uncertainty 
+estimation and improve robustness in novel environments, thereby addressing the challenge of limited maritime 
+environment semantic segmentation datasets. The results indicate that Bayesian SegNet, by reducing noise in input 
+data, improves Precision ($\mathbf{Pr}$) by 1.3\% and increases the F1 score ($\mathbf{F1}$) by 6.5\% compared to the 
+non-Bayesian baseline. Additionally, Bayesian SegNet significantly outperforms SegNet in uncertainty estimation, as 
+demonstrated through entropy-based analysis. 
+
+Moreover, the Bayesian model shows superior generalization capabilities, with a notable advantage in evaluating 
+the OASIs dataset from the USV perspective. The F1 score achieved by Bayesian SegNet surpasses that of SegNet by 
+39.77\%, highlighting the strong inference abilities of Bayesian Approach in conditions with limited training data. 
+These evaluations further demonstrate that Bayesian SegNet can effectively enhance USV environmental perception 
+based on existing trained models in new environments. 
+
+The characteristics of Bayesian SegNet provide USVs with more precise and reliable environmental perception, 
+enhancing their autonomous navigation and risk avoidance capabilities in maritime environment. Given the 
+ever-changing maritime environment, the coverage of available datasets is inherently limited. By leveraging the 
+inference capabilities of the Bayesian approach, this model can effectively perceive a wider range of scenarios 
+using limited datasets. As part of the perception module, this model is crucial for the autonomous navigation 
+systems of USVs.
+
+Beyond maritime applications, the methods, and findings of this study have the potential to impact other USV-related 
+fields where strong environmental perception is essential. For instance, automated navigation in inland waterways 
+could benefit from the improved uncertainty estimation and generalization capabilities provided by Bayesian SegNet, 
+enabling safer and more reliable navigation in complex urban channels. Additionally, in fields with a significant 
+scarcity of datasets, such as underwater robotics navigation, decision-making under uncertainty is crucial. 
+Integrating similar Bayesian approaches into their perception systems could lead to substantial advancements.
+
+However, this study also acknowledges certain limitations. Firstly, the model's parameter tuning, particularly 
+the selection of various thresholds, requires further refinement. Additionally, other datasets should be used to 
+further verify the generalization capabilities. Future work should focus on testing the model with different datasets, 
+including MODD2 and SMD, and enhancing the uncertainty estimation techniques to fully exploit the potential of 
+Bayesian SegNet. Exploring alternative architectures for optimization is also recommended, as Bayesian SegNet's 
+reliance on Monte Carlo sampling for environment perception is computationally intensive. This high resource 
+demand could lower the frame rate of visual detection in USVs, potentially hindering real-time processing of 
+environmental information.

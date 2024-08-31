@@ -1,0 +1,166 @@
+%% Style file for MECH MSc thesis. 
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper, top=25.4mm, bottom=25.4mm, left=19.1mm, right=19.1mm, footskip=8mm]{geometry}
+% \usepackage[skip=8pt, indent=20pt]{parskip}
+\usepackage[skip=7pt]{parskip}
+\usepackage[list=true, listformat=simple]{subcaption}
+\usepackage[usestackEOL]{stackengine}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{gensymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{xurl}
+\usepackage{indentfirst}
+\usepackage{sectsty}
+\usepackage{everypage}
+\usepackage{times}
+\usepackage{cite}
+\usepackage{subcaption}
+\usepackage{textcomp}
+
+% Change subfigure caption into fontsize 9
+\usepackage{caption}
+\usepackage{subcaption}
+\DeclareCaptionFont{eight}{\fontsize{9}{10}\selectfont}
+\captionsetup[subfigure]{font=eight}
+
+% Frame for Cover Page
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+
+% ########### Header and footer ###########
+% Defining marks
+\renewcommand{\sectionmark}[1]{\gdef\leftmark{#1}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+
+\fancypagestyle{coverpage}{
+    \fancyhf{}
+    \fancyfoot[C]{}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{firstpage}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{fancy}{
+    \fancyhf{}
+    \fancyhead[L]{UCL Mechanical Engineering}
+    \fancyhead[C]{MSc Thesis}
+    \fancyhead[R]{AY23-24}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+\setlength{\headheight}{13.6pt}
+% Use fancy page style unless otherwise specified
+\pagestyle{fancy}
+
+% ########### Maths environment spacing ###########
+
+% Redefining space around equation environment
+\let\equationOriginal\equation
+\let\endequationOriginal\endequation
+\renewenvironment{equation}{
+    \vspace{-4mm}
+    \equationOriginal}
+{
+\endequationOriginal
+\vspace{-7mm}
+}
+
+% Redefining space around align environment
+\let\alignOriginal\align
+\let\endalignOriginal\endalign
+\renewenvironment{align}{
+    \vspace{-7mm}
+    \alignOriginal}
+{
+\endalignOriginal
+\vspace{-8mm}
+}
+
+% Redefining space around subequations environment
+\let\subequationsOriginal\subequations
+\let\endsubequationsOriginal\endsubequations
+\renewenvironment{subequations}{
+    \subequationsOriginal}
+{
+\endsubequationsOriginal
+\vspace{1mm}
+}
+
+% ########### Other ###########
+
+% Biblography spacing
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+  \OLDthebibliography{#1}
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{5pt plus 0.3ex}
+}
+
+% Spacing around headings
+\setlength{\parindent}{0pt}
+\titlespacing*{\section}{0pt}{5pt}{5pt}
+\titlespacing*{\subsection}{0pt}{5pt}{5pt}
+
+% Other spacing
+\setlength{\parindent}{2.5mm} % Interparagraph
+\setlength{\skip\footins}{8mm} % Footnotes
+\setlength{\columnsep}{5mm} % Column separation
+
+% Section formatting
+\sectionfont{\centering\MakeUppercase}
+
+% Use roman numerals to count to tables
+\renewcommand{\thetable}{\Roman{table}}
+
+% Change the figure and table captions
+\captionsetup[table]{labelfont=bf, labelsep=period}
+\captionsetup[figure]{labelfont=bf, labelsep=period}
+
+\begin{document}
+
+\input{Sections/CoverPage}
+
+\newpage
+\setcounter{page}{1}
+\thispagestyle{firstpage}
+
+\begin{center}
+    \vspace*{-20mm}
+    \huge Bayesian Deep Learning Based Semantic Segmentation for Marine Environments\\
+    \vspace{5mm}
+    \large Zehao Ye  \\
+    \large MSc Power Systems Engineering  \\
+    \large UCL Mechanical Engineering  \\
+    \large London WC1E7JE  \\
+    \vspace{3 mm}
+    \large \today
+\end{center}
+
+\input{Sections/0_Abstract}
+\input{Sections/1_Introduction}
+\input{Sections/2_LiteratureReview}
+\input{Sections/3_Methodology}
+\input{Sections/4_Results}
+\input{Sections/5_Discussion}
+\input{Sections/6_Conclusion}
+
+\newpage
+
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\end{document}

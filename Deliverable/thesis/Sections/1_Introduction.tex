@@ -1,0 +1,59 @@
+\section{Introduction}
+Unmanned Surface Vehicles (USVs) play a crucial role in commercial shipping\cite{USVshipping}, environmental 
+and climate monitoring\cite{USVenvmonitor}, seabed mapping\cite{USVseabedmap}, surveillance and infrastructure 
+inspection\cite{USVbridgeinspection}. USVs and AUVS (autonomous underwater vehicles) share similar benefits, 
+particularly in reducing the need for personnel to operate in hazardous environments, thereby enhancing safety 
+and security and lowering operational costs for maritime tasks. However, AUVs are limited in range and flexibility 
+due to their reliance on the mother ship for positioning support\cite{AUV}. In contrast, USVs can operate over 
+a wider range with greater precision, offering increased autonomy and adaptability in complex environments 
+\cite{USVoverview}. 
+
+As the advantages of USVs become increasingly evident, navigation has emerged as a critical area of 
+research. Due to the expansive spatial scale of the marine environment, LiDAR Point Cloud systems commonly 
+used in UGVs (unmanned ground vehicles) are not suitable for USVs \cite{lidarpointcloud}. Therefore, cameras 
+are employed as sensing modules for USVs due to their lightweight, low-power, and high-information-density 
+characteristics \cite{MODS}. Additionally, a perception module is needed to extract useful information from 
+high-information-density images through computer vision \cite{perceptionmodule}. Semantic segmentation, which 
+provides pixel-level semantic information, is particularly valuable as it helps intelligent systems understand 
+spatial positions and make critical decisions \cite{SSsurvey}. This approach, which has been favored in autonomous 
+driving\cite{autodrive1}, \cite{autodrive2}, is applicable to USVs with deep learning techniques.
+
+However, using semantic segmentation on USVs presents two main challenges. First, the accuracy of semantic 
+segmentation declines when USVs encounter novel scenarios. Most deep learning models for semantic segmentation 
+produce point estimates as outputs without providing confidence levels \cite{evaluateBDL}, which can lead to 
+errors in novel environments. For example, the autonomous driving system mistakenly identified a plastic bag as a 
+rock, resulting in an unnecessary emergency brake \cite{autodrive-mistake}.
+% two African Americans were mistakenly identified as gorillas by an image classification system \cite{USAtoday}. 
+If models could provide lower confidence for uncertain predictions, 
+such issues could be mitigated. Secondly, there is a scarcity of per-pixel semantically labelled marine environment 
+databases. Due to the complexity of marine environments, collecting marine datasets is challenging, and the 
+available marine datasets are less than those for land environments \cite{CamVid}, \cite{Cityscapes}, 
+\cite{landsemanticdataset}. The requirement for per-pixel semantic labelling further increases the cost of marine 
+datasets. 
+
+Probabilistic outputs can be derived using the softmax function as the activation function at the output layer, 
+or through more complex methods like particle filters to assist in modelling uncertainty in computer vision as a 
+measure of confidence \cite{particlefilter}. However, these methods are not based on deep learning and cannot 
+achieve state-of-the-art performance \cite{resnet}. Bayesian deep learning approaches have proven effective 
+for capturing uncertainty in semantic segmentation, offering a more refined way to model uncertainty 
+\cite{whatuncertaintydoweneed}. Additionally, Bayesian deep learning can also address dataset scarcity by 
+incorporating epistemic uncertainty to reflect confidence in novel scenarios and using prior distributions 
+for regularization, thus preventing overfitting \cite{overfitting}. 
+
+In selecting the deep learning architecture, the VGG16-based SegNet approach was chosen due to the availability 
+of existing Bayesian SegNet methodologies that can be leveraged \cite{VGG,SegNet}. The VGG architecture, being 
+simpler compared to alternatives like ResNet, is easier to implement and serves well as a foundational model for 
+research \cite{vggcompare}. 
+
+The aim of this research is to enhance the visual detection capabilities of USVs by utilizing Bayesian 
+SegNet for semantic segmentation in marine environments. This demonstrates that Bayesian SegNet 
+can provide robust uncertainty estimates, enhancing reliability in complex and dynamic marine environments. 
+Additionally, this approach addresses the challenges posed by dataset scarcity, improving the performance of 
+USV perception systems in novel scenarios.
+
+The remainder of this thesis is structured as follows. Section \ref{section:LR} reviews and discusses the most 
+relevant prior research in the field. A comprehensive overview of the methodology employed for semantic segmentation
+is provided in Section \ref{sectino:Methodology}. Evaluation metrics are presented in Section \ref{section:results}, 
+along with a multidimensional performance comparison. Section \ref{section:discussion} analyses the evalaution 
+performance and proposes future research directions, while Section \ref{section:conclusion} offers a comprehensive 
+conclusion.
