@@ -72,7 +72,7 @@ The instructions of downloading datasets are illistruted in the [link](https://g
 The corresponding `*.tar.gz` files of datasets are provided as well in [Dataset file](https://github.com/yezehao/BDL-based-semantic-segmentation/tree/main/Dataset).     
 
 ## Requirements
-Conda environment ![conda](https://img.shields.io/badge/Anaconda-44A833.svg?style=flat&logo=Anaconda&logoColor=white) *RECOMMAND*    
+Conda environment ![conda](https://img.shields.io/badge/Anaconda-44A833.svg?style=flat&logo=Anaconda&logoColor=white)
 ```
 conda create -n <your-env-name> python=3.10  
 ```
