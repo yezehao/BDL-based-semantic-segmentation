@@ -113,3 +113,16 @@ Performance on OASIs dataset
 |                     |                        | **2**    | 1.69       | 97.17      | 3.32       |
 |                     |                        | **3**    | 10.09      | 98.97      | 17.82      |
 | **SegNet**          | **SMD**                | --       | 31.2       | 76.3       | 44.3       |
+
+## Citation
+```
+@article{ye2025bayesian,
+  title={Bayesian deep learning based semantic segmentation for unmanned surface vehicles in uncertain marine environments},
+  author={Ye, Zehao and Huang, Yanhong and Wu, Peng and Liu, Yuanchang},
+  journal={Ocean Engineering},
+  volume={339},
+  pages={122065},
+  year={2025},
+  publisher={Elsevier}
+}
+```
